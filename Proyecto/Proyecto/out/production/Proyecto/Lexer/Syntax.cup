@@ -1,0 +1,112 @@
+package Lexer;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+    /*private int errorCounter = 0;
+    private LexerCup lexer;
+
+        public Syntax(LexerCup lexer) {
+            this.lexer = lexer;
+        }
+
+        public void setLexer(LexerCup lexer) {
+            this.lexer = lexer;
+        }
+
+        public Symbol parseNextToken() throws java.io.IOException {
+            Symbol token = lexer.next_token();
+            return token;
+        }
+
+        public void incrementErrorCount() {
+            errorCounter++;
+        }
+
+        public int errorCount() {
+            return errorCounter;
+        }*/
+
+        public void syntax_error(Symbol s)
+        {
+            this.s = s;
+        }
+
+        public Symbol getS(){
+            return this.s;
+        }
+:};
+
+terminal  Num, NegNum, Div, Mul, Minus, Plus, Equal, Assign, Difference, RightEqual,
+         Right, Left, LeftEqual, SemiColon, LeftParenthesis, RightParenthesis,
+         Then, EndIf, EndWhile, Do, Var, If, Else, While, UNRECOGNIZEDCHAR;
+non terminal WHILE, IF, IFELSE, CONDITION, STATEMENT, ASSIGNMENT, MATHEXPRESSION, OPERAND, OPERATOR;
+
+start with STATEMENT;
+
+OPERAND ::=
+    Num | NegNum | Var
+;
+
+
+OPERATOR ::=
+    Equal |
+    RightEqual |
+    Right |
+    Left |
+    LeftEqual
+;
+
+
+MATHEXPRESSION ::=
+    OPERAND |
+    LeftParenthesis MATHEXPRESSION RightParenthesis |
+    MATHEXPRESSION Plus OPERAND  |
+    MATHEXPRESSION Minus OPERAND     |
+    MATHEXPRESSION Div OPERAND |
+    MATHEXPRESSION Mul OPERAND |
+    MATHEXPRESSION NegNum
+;
+
+
+ASSIGNMENT::=
+Var Assign MATHEXPRESSION SemiColon
+ {: System.out.println("Valid Assignment."); :}
+
+;
+
+CONDITION ::=
+
+LeftParenthesis OPERAND OPERAND OPERATOR RightParenthesis
+
+;
+
+WHILE ::=
+    While CONDITION Do STATEMENT EndWhile SemiColon
+     {: System.out.println("Valid While."); :}
+;
+
+IF ::=
+    If CONDITION Then STATEMENT EndIf SemiColon
+     {: System.out.println("Valid If."); :}
+;
+
+IFELSE ::=
+    If CONDITION Then STATEMENT Else STATEMENT EndIf SemiColon
+     {: System.out.println("Valid IfElse."); :}
+;
+
+STATEMENT ::=
+    ASSIGNMENT |
+    ASSIGNMENT STATEMENT |
+    IFELSE |
+    IFELSE STATEMENT |
+    IF |
+    IF STATEMENT |
+    WHILE |
+    WHILE STATEMENT
+;
+
+

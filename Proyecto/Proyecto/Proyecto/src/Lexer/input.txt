@@ -1,0 +1,13 @@
+x_0 = -1;
+y = 2 -y;
+z = 0
+counter = 0;
+while (counter 9 <=) do
+    if (x y ==) then
+        z=z -1;
+        x=x+1
+    else
+        z = z*2
+    endif;
+    counter = counter + 1;
+endwhile;
